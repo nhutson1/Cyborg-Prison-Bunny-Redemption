@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controller.MainFXMLController">
+   <children>
+      <Label alignment="CENTER" layoutX="39.0" layoutY="30.0" prefHeight="68.0" prefWidth="695.0" text="Cybrog Prison Bunny Redemption" textAlignment="CENTER">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Button layoutX="362.0" layoutY="369.0" mnemonicParsing="false" onAction="#handle" text="Start" />
+      <Button layoutX="354.0" layoutY="411.0" mnemonicParsing="false" onAction="#options" text="Options" />
+      <Button layoutX="362.0" layoutY="449.0" mnemonicParsing="false" onAction="#quit" text="Quit" />
+      <Label fx:id="myLabel" layoutX="324.0" layoutY="217.0" text="Label">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
