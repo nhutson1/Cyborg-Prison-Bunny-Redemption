@@ -94,7 +94,6 @@ public class MainFXMLController implements EventHandler<ActionEvent>, Initializa
 	public void handle(ActionEvent event) {
 		// TODO Auto-generated method stub
 		System.out.println( "Got to MainFXMLController!" );
-		myLabel.setText( "Game started" );
 		startGame("test.fxml");
 	}
 	
@@ -123,7 +122,6 @@ public class MainFXMLController implements EventHandler<ActionEvent>, Initializa
 	
 	public void options(ActionEvent event){
 		System.out.println( "Got to MainFXMLController!" );
-		myLabel.setText( "Options menu" );
 		switchStage("options.fxml");
 	}
 	
@@ -134,7 +132,6 @@ public class MainFXMLController implements EventHandler<ActionEvent>, Initializa
 
 	public void quit(ActionEvent event){
 		System.out.println( "Got to MainFXMLController!" );
-		myLabel.setText( "Game quit" );
 	}
 
 }

@@ -13,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 
 
 
@@ -27,6 +28,9 @@ public class Main extends Application {
 		this.stage = primaryStage;
 		Main.primaryStage = primaryStage;
 		
+	    Font.loadFont(Main.class.getResource("RAIDERCRUSADER.TTF").toExternalForm(), 10);
+	    Font.loadFont(Main.class.getResource("SPACECRAFT.TTF").toExternalForm(), 10);
+	    
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation( Main.class.getResource("../myFXML.fxml") );
