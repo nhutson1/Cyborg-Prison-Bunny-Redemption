@@ -3,6 +3,7 @@ package application.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.ResourceBundle;
 
 import application.Main;
@@ -29,7 +30,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class MainFXMLController implements EventHandler<ActionEvent>, Initializable {
+public class MainFXMLController implements EventHandler<ActionEvent>, Initializable, Runnable {
 
 	@FXML
 	Label myLabel;
@@ -38,10 +39,65 @@ public class MainFXMLController implements EventHandler<ActionEvent>, Initializa
 	TextField textField;
 
 	Group root1 = new Group();
+	Player newPlayer = new Player(100, 3, 1);
+
+	private boolean running = false;
+	private Thread thread;
+	
+	private synchronized void start(){
+		if(running) return;
+		running = true;
+		
+		thread = new Thread(this);
+		thread.start();
+	}
+	
+	private synchronized void stop(){
+		if(!running) return;
+		running = false;
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.exit(1);
+	}
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
+		
+	}
+	
+	// Game loop
+	public void run(){
+		long lastTime = System.nanoTime();
+		final double amountOfTicks = 60.0;
+		double ns = 1000000000 / amountOfTicks;
+		double delta = 0;
+		int updates = 0;
+		int frames = 0;
+		long timer = System.currentTimeMillis();
+		while(running){
+			long now = System.nanoTime();
+			delta += (now - lastTime) / ns;
+			lastTime = now;
+			if(delta >= 1){
+				newPlayer.tick();
+				updates++;
+				delta--;
+			}
+			frames++;
+			
+			if(System.currentTimeMillis() - timer > 1000){
+				timer += 1000;
+				System.out.println(updates);
+				updates = 0;
+				frames = 0;
+			}
+		}
+		stop();
 	}
 	
 	/* similar to the switchStage method except it grabs the value from the TextField
@@ -64,8 +120,11 @@ public class MainFXMLController implements EventHandler<ActionEvent>, Initializa
 			/* getting the circle object from SceneBuilder with the @FXML annotation won't work since
 			we're changing scenes so I'm using this instead */
 			Circle playerCircle = (Circle) Main.primaryStage.getScene().lookup("#playerCircle"); 																								
-			Player newPlayer = new Player(100, moveSpeed, 3, 1, playerCircle);
-			moveCircleOnKeyPress(Main.primaryStage.getScene(), newPlayer.getPlayerCircle(), newPlayer);
+			newPlayer.setPlayerCircle(playerCircle);
+			newPlayer.setMoveSpeed(moveSpeed);
+			movePlayerOnKeyPress(Main.primaryStage.getScene(), newPlayer);
+			start();
+			
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -73,21 +132,38 @@ public class MainFXMLController implements EventHandler<ActionEvent>, Initializa
 		}
 	}
 	
-	private void moveCircleOnKeyPress(Scene scene, final Circle circle, Player player) {
+	
+	private void movePlayerOnKeyPress(Scene scene, Player player) {
 	      scene.setOnKeyPressed(new EventHandler<KeyEvent>() { 
 	      @Override public void handle(KeyEvent event) {
-	        switch (event.getCode()) {
+	    	  switch (event.getCode()) {
 	          case W:
-	          case UP:    circle.setCenterY(circle.getCenterY() - player.getMoveSpeed()); break;
+	          case UP:    player.setVelY(-player.getMoveSpeed()); break;
 	          case D:
-	          case RIGHT: circle.setCenterX(circle.getCenterX() + player.getMoveSpeed()); break;
+	          case RIGHT: player.setVelX(player.getMoveSpeed()); break;
 	          case S:
-	          case DOWN:  circle.setCenterY(circle.getCenterY() + player.getMoveSpeed()); break;
+	          case DOWN:  player.setVelY(player.getMoveSpeed()); break;
 	          case A:
-	          case LEFT:  circle.setCenterX(circle.getCenterX() - player.getMoveSpeed()); break;
+	          case LEFT:  player.setVelX(-player.getMoveSpeed()); break;
+	          default: break;
 	        }
 	      }
 	    });
+	      scene.setOnKeyReleased(new EventHandler<KeyEvent>() { 
+		      @Override public void handle(KeyEvent event) {
+		        switch (event.getCode()) {
+		          case W:
+		          case UP:    player.setVelY(0); break;
+		          case D:
+		          case RIGHT: player.setVelX(0); break;
+		          case S:
+		          case DOWN:  player.setVelY(0); break;
+		          case A:
+		          case LEFT:  player.setVelX(0); break;
+		          default: break;
+		        }
+		      }
+		    });
 	  }
 	
 	@Override
