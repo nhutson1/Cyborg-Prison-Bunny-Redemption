@@ -27,6 +27,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		this.stage = primaryStage;
 		Main.primaryStage = primaryStage;
+		primaryStage.setResizable(false);
 		
 	    Font.loadFont(Main.class.getResource("RAIDERCRUSADER.TTF").toExternalForm(), 10);
 	    Font.loadFont(Main.class.getResource("SPACECRAFT.TTF").toExternalForm(), 10);
