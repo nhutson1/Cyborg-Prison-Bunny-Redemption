@@ -15,18 +15,20 @@ public class Player {
 	private int xpToLevel;
 	private ArrayList<Item> items;
 	private Circle playerCircle;
+	private double velX, velY;
 	
-	public Player(int maxHealth, double moveSpeed, int lives, int level, Circle myPlayer){
+	public Player(int maxHealth, int lives, int level){
 		this.maxHealth = maxHealth;
 		this.health = maxHealth;
-		this.moveSpeed = moveSpeed;
 		this.lives = lives;
 		this.level = level;
 		this.items = new ArrayList<Item>();
-		playerCircle = myPlayer;
 	}
 	
-	
+	public void tick() {
+	    playerCircle.setCenterX(playerCircle.getCenterX() + velX);
+	    playerCircle.setCenterY(playerCircle.getCenterY() + velY);
+	}
 
 	public int getMaxHealth() {
 		return maxHealth;
@@ -110,5 +112,21 @@ public class Player {
 
 	public void setPlayerCircle(Circle playerCircle) {
 		this.playerCircle = playerCircle;
+	}
+
+	public double getVelX() {
+		return velX;
+	}
+
+	public void setVelX(double velX) {
+		this.velX = velX;
+	}
+
+	public double getVelY() {
+		return velY;
+	}
+
+	public void setVelY(double velY) {
+		this.velY = velY;
 	}
 }
